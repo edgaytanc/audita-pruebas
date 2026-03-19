@@ -1,0 +1,61 @@
+{% extends "common/system-base.html" %}
+
+{% block title %}
+    Auditorias Asignadas
+{% endblock title %}
+{% block page_title %}
+    Auditorías del Auditor
+{% endblock page_title %}
+{% block page_subtitle %}
+    {{ user_to_manage.get_full_name }}
+{% endblock page_subtitle %}
+{% block main_content %}
+    <section class="container-fluid">
+        <header class="row mt-4">
+            <div class="col-12 col-md-6">
+                <div class="d-flex flex-column p-4">
+                    <h3 class="display-6">Auditorías</h3>
+                    <p class="text-muted">Auditorías asignadas al auditor.</p>
+                </div>
+            </div>
+        </header>
+        <article class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="width: 32px;">#</th>
+                                        <th scope="col">Título</th>
+                                        <th scope="col">Identidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for audit in audits %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td class="font-medium">{{ audit.title }}</td>
+                                            <td>{{ audit.identidad }}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="3" class="text-center">No hay auditorías asignadas a este auditor</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="w-100 text-end d-flex flex-column flex-md-row gap-3 justify-content-between align-items-center">
+                            <div class="text-start">
+                                <strong>Auditor:</strong> {{ user_to_manage.get_full_name }} - {{ user_to_manage.role }}
+                            </div>
+                            <a href="{% url 'manage_auditors' %}" class="btn btn-secondary">Volver</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </section>
+{% endblock main_content %}

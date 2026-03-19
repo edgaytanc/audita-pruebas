@@ -1,0 +1,126 @@
+{
+  "entidad": {
+    "placeholders": [
+      "[IDENTIDAD]",
+      "[NOMBRE_CLIENTE]"
+    ],
+    "default": "Sin identidad",
+    "formatos": {
+      "con_espacio": {
+        "placeholders": [
+          "Entidad XXXXXXX",
+          "Entidad tesla",
+          "ENTIDAD XXXXXXXXXXXXXXXXXXXXX"
+        ],
+        "template": "Entidad {}"
+      },
+      "con_dos_puntos": {
+        "placeholders": [
+          "Entidad: XXXXXXX"
+        ],
+        "template": "Entidad: {}"
+      }
+    }
+  },
+  "fecha_rango": {
+    "placeholders": [
+      "Del 01 de Enero al 31 de Diciembre de 2024",
+      "Del 01 de Enero de 2023 al 31 de Diciembre de 2023",
+      "Del 01 de Enero al 31 de Diciembre de 2023",
+      "DEL 01 DE ENERO AL 31 DE DICIEMBRE DE 2023",
+      "[FECHA_RANGO]"
+    ],
+    "template": "Del {} al {}",
+    "patrones": [
+      "Del \\d{2} de [A-Za-zé]+ al \\d{2} de [A-Za-zé]+ de \\d{4}",
+      "Del \\d{2} de [A-Za-zé]+ de \\d{4} al \\d{2} de [A-Za-zé]+ de \\d{4}",
+      "Del 01 de Enero de 2023 al 31 de Diciembre de 2023",
+      "Del 01 de Enero al 31 de Diciembre de 2023"
+    ]
+  },
+  "titulo_auditoria": {
+    "placeholder": "[TITULO_AUDITORIA]",
+    "default": "Sin título",
+    "placeholders": [
+      "AUDITORIA FINANCIERA",
+      "Auditoria Financiera",
+      "Auditoría Financiera",
+      "Auditoria financiera",
+      "auditoria financiera",
+      "Auditoria de Estados Financieros",
+      "Auditoría de Estados Financieros",
+      "Auditoría de Procesos",
+      "Auditoria de Procesos"
+    ]
+  },
+  "tipo_auditoria": {
+    "placeholder": "[TIPO_AUDITORIA]",
+    "values": {
+      "F": "Financiera",
+      "I": "Interna"
+    }
+  },
+  "auditor": {
+    "placeholder": "[AUDITOR]",
+    "default": "Auditor Principal"
+  },
+  "moneda": {
+    "placeholders": [
+      "Cifras expresadas en quetzales",
+      "Cifras expresadas en Quetzales",
+      "CIFRAS EXPRESADAS EN QUETZALES",
+      "cifras expresadas en quetzales",
+      "Expresado en quetzales",
+      "Expresado en Quetzales",
+      "EXPRESADO EN QUETZALES",
+      "expresado en quetzales",
+      "[MONEDA_EXPRESION]"
+    ],
+    "template": "Cifras expresadas en {}",
+    "default": "quetzales",
+    "currency_names": {
+      "GTQ": "quetzales",
+      "USD": "dólares estadounidenses",
+      "CAD": "dólares canadienses",
+      "MXN": "pesos mexicanos",
+      "BZD": "dólares beliceños",
+      "HNL": "lempiras",
+      "NIO": "córdobas",
+      "CRC": "colones costarricenses",
+      "PAB": "balboas",
+      "CUP": "pesos cubanos",
+      "JMD": "dólares jamaicanos",
+      "HTG": "gourdes",
+      "DOP": "pesos dominicanos",
+      "TTD": "dólares de Trinidad y Tobago",
+      "BBD": "dólares de Barbados",
+      "BSD": "dólares bahameños",
+      "ARS": "pesos argentinos",
+      "BOB": "bolivianos",
+      "BRL": "reales brasileños",
+      "CLP": "pesos chilenos",
+      "COP": "pesos colombianos",
+      "GYD": "dólares guyaneses",
+      "PYG": "guaraníes",
+      "PEN": "soles peruanos",
+      "SRD": "dólares surinameses",
+      "UYU": "pesos uruguayos",
+      "VES": "bolívares",
+      "EUR": "euros"
+    }
+  },
+  "patrones_regex": [
+    {
+      "pattern": "Entidad:\\s*",
+      "reemplazar_por": "[ENTIDAD_COMPLETA]"
+    },
+    {
+      "pattern": "Auditor[ií]a:\\s*",
+      "reemplazar_por": "[AUDITORIA_COMPLETA]"
+    },
+    {
+      "pattern": "Per[ií]odo:\\s*",
+      "reemplazar_por": "[FECHA_RANGO_COMPLETA]"
+    }
+  ]
+}

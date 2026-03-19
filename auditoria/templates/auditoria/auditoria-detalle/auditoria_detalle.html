@@ -1,0 +1,127 @@
+{% extends "common/system-base.html" %}
+{% load static %}
+
+{% block title %}Detalles de la Auditoría{% endblock title %}
+{% block page_title %}Detalles de la Auditoría{% endblock page_title %}
+
+{% block main_content %}
+<link rel="stylesheet" href="{% static 'users/styles.css' %}">
+<link rel="stylesheet" href="{% static 'style/auditoria_detalle.css' %}">
+
+<div class="container">
+    <h4>{{ nombre_auditoria }}</h4>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button class="btn btn-primary" onclick="abrirModalGenerarDocumento({{ audit.id }})">
+            📄 Generar documento
+        </button>
+
+        <button onclick="handleExportCuentas()" class="download-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon-img" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M.5 9.9a.5.5 0 0 1 .5-.4h4.7V1a.5.5 0 0 1 1 0v8.5h4.7a.5.5 0 0 1 .4.9l-5 5a.5.5 0 0 1-.8 0l-5-5z" />
+            </svg>
+            Exportar Cuentas Contables
+        </button>
+
+        <button onclick="openImportModal()" class="download-button">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon-img" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M.5 6.1a.5.5 0 0 1 .5.4v4.7h3.5a.5.5 0 0 1 0 1H1v3.5a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z" />
+                <path
+                    d="M15 0a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-5v1h3.5a.5.5 0 0 1 0 1H10v2.5a.5.5 0 0 1-1 0V9h-1.5a.5.5 0 0 1 0-1H9V6a1 1 0 0 1 1-1h5V1a1 1 0 0 1 1-1z" />
+            </svg>
+            Importar
+        </button>
+
+        <button onclick="openAuditMarksModal()" class="download-button" style="background-color: #6c757d;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon-img" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+            </svg>
+            Marcas de Auditoría
+        </button>
+    </div>
+
+    <!-- Carpeta -->
+    <div class="folder-structure">
+        {{ estructura_html|safe }}
+    </div>
+</div>
+
+<!-- MODAL IMPORTAR -->
+<div id="importModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeImportModal()">&times;</span>
+
+        <div id="import-main-section">
+            <div class="modal-header">Importar Cuentas Contables</div>
+            <div class="modal-body">
+                <button onclick="goToImportUpload('estado-financiero')" class="download-button w-full">
+                    Estado Financiero
+                </button>
+            </div>
+        </div>
+
+        <div id="import-upload-section" style="display: none;">
+            <div class="modal-header" id="importUploadTitle">Importar</div>
+            <form id="uploadForm" enctype="multipart/form-data" onsubmit="submitImportForm(event)">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <label for="archivo_excel" class="form-label">Selecciona un archivo Excel:</label>
+                    <input type="file" name="archivo_excel" id="archivo_excel" accept=".xlsx,.xls" required
+                        class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="download-button">Subir</button>
+                    <button type="button" class="download-button" style="background-color: grey;"
+                        onclick="goBackToImportMain()">Volver</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EXPORTAR -->
+<div id="exportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeExportModal()">&times;</span>
+        <div class="modal-header">Confirmar Exportación</div>
+        <div class="modal-body">
+            <button onclick="exportFile('estados-financieros')" class="download-button w-full">Estados Financieros</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL MARCAS DE AUDITORÍA -->
+{% include 'auditoria/_upload-audit-marks-modal.html' %}
+
+<!-- Contexto dinámico para el JS estático -->
+<script>
+window.AUDIT_CTX = {
+  audit_id: "{{ audit.id }}",
+  import_url: "{% url 'importar_cuentas_contables' audit_id=audit.id %}"
+};
+</script>
+<script src="{% static 'js/auditoria_detalle.js' %}"></script>
+
+<!-- Script para boton generar documento -->
+<script>
+function abrirModalGenerarDocumento(auditId) {
+  fetch(`/auditoria/detalle/${auditId}/generar-modal/`)
+    .then(response => response.json())
+    .then(data => {
+      const modalDiv = document.createElement("div");
+      modalDiv.innerHTML = data.html;
+      document.body.appendChild(modalDiv);
+
+      const modal = new bootstrap.Modal(document.getElementById("generarDocumentoModal"));
+      modal.show();
+    })
+    .catch(err => console.error("Error al cargar modal:", err));
+}
+</script>
+
+{% include 'auditoria/modals/generar_documento_modal.html' with audit=audit auditor_nombre=auditor_nombre supervisor_nombre=supervisor_nombre %}
+
+{% endblock main_content %}
